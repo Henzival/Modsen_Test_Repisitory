@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+.navbar {
+  padding: 30px 0px !important;
+  background-image: url('img/black-and-white-book.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 200%;
+  justify-content: center !important;
+}
+
+.greeting {
+  margin-bottom: 30px;
+  padding: 0;
+  font-weight: bold;
+  font-size: 30px;
+  color: white;
+  display: block;
+
+}
+
+.navbar_search {
+  padding: 0% 50%;
+}
+
+.navbar_input {
+  width: 500px;
+}
