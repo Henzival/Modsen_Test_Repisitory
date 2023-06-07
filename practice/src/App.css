@@ -38,11 +38,11 @@
 }
 
 .navbar {
-  padding: 30px 0px !important;
+  padding: 30px 0px;
   background-image: url('img/black-and-white-book.jpg');
   background-repeat: no-repeat;
   background-size: 100% 200%;
-  justify-content: center !important;
+  justify-content: center;
 }
 
 .greeting {
@@ -51,14 +51,41 @@
   font-weight: bold;
   font-size: 30px;
   color: white;
-  display: block;
-
 }
 
 .navbar_search {
+  display: flex;
   padding: 0% 50%;
+  margin-bottom: 20px;
 }
 
 .navbar_input {
   width: 500px;
+}
+
+.input-group-text {
+  border-radius: 0;
+}
+
+.filtration {
+  display: flex;
+}
+
+.dropdown-1 {
+  margin-left: 8px;
+  margin-right: 50px;
+}
+
+.categories-text {
+  padding-top: 7px;
+  color: white;
+}
+
+.sorting-text {
+  padding-top: 7px;
+  color: white;
+}
+
+.dropdown-2 {
+  margin-left: 8px;
 }
