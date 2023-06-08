@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
 }
@@ -41,8 +45,9 @@
   padding: 30px 0px;
   background-image: url('img/black-and-white-book.jpg');
   background-repeat: no-repeat;
-  background-size: 100% 200%;
+  background-size: 100% 100%; 
   justify-content: center;
+  flex-direction: column;
 }
 
 .greeting {
@@ -55,7 +60,6 @@
 
 .navbar_search {
   display: flex;
-  padding: 0% 50%;
   margin-bottom: 20px;
 }
 
@@ -76,6 +80,12 @@
   margin-right: 50px;
 }
 
+.dropdown-toggle {
+  border-radius: 0%;
+  background-color: white;
+  color: #000;
+}
+
 .categories-text {
   padding-top: 7px;
   color: white;
@@ -88,4 +98,14 @@
 
 .dropdown-2 {
   margin-left: 8px;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+}
+
+.results {
+  padding-top: 5px;
+  font-size: 22px;
 }
