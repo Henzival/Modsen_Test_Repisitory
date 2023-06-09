@@ -16,7 +16,7 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+ 
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -58,13 +58,29 @@
   color: white;
 }
 
+@media (max-width: 768px) {
+  .greeting {
+    font-size: 20px;
+  }
+  .navbar_input {
+    min-width: 250px !important;
+  }
+  .input-group-text {
+    width: 30px;
+  }
+  .dropdown-1 {
+    margin-left: 8px;
+    margin-right: 10px !important;
+  }
+}
+
 .navbar_search {
   display: flex;
   margin-bottom: 20px;
 }
 
 .navbar_input {
-  width: 500px;
+  min-width: 500px;
 }
 
 .input-group-text {
