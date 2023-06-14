@@ -87,6 +87,10 @@
   border-radius: 0;
 }
 
+.input-group-text:hover {
+  cursor: pointer;
+}
+
 .filtration {
   display: flex;
 }
