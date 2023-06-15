@@ -9,7 +9,8 @@ const App = function() {
   const [book, setBook] = useState('');
   const [result, setResult] = useState([]);
   const [apiKey, setApiKey] = useState('AIzaSyABr3qUyULawkxgjZDk3HwgwdbwhImINDg');
-
+  const [quantity, setQuantity] = useState('');
+  
   const handleChange = (event) => {
     const book = event.target.value;
     setBook(book);
@@ -18,8 +19,10 @@ const App = function() {
     event.preventDefault();
     axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=40')
     .then(data => {
+      console.log(data);
       console.log(data.data.items);
       setResult(data.data.items);
+      setQuantity(data);
     });
   }
     
@@ -64,11 +67,17 @@ const App = function() {
           </div>
         </div> 
       </div>
-      {result.map(book => (
-        <a target='_blank' href={book.volumeInfo.previewLink}>
-          <img src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title} />
-        </a>
+      {result.length !== 0 ? <div className='result'> <h2 className="results">Found {quantity.data.totalItems} results</h2></div> : ''}
+      <div className='cards'>
+        {result.map(book => (
+          <a target='_blank' href={book.volumeInfo.previewLink} className='book-card'>
+            <h3>{book.volumeInfo.categories + ''}</h3>
+            <img src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title} width={250} height={350}/>
+            <h3>{book.volumeInfo.title}</h3>            
+            <h3>{book.volumeInfo.authors + ''}</h3>
+          </a>
       ))}
+        </div>
     </section>
   );
 }
