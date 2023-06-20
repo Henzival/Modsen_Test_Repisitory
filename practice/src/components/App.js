@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/App.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -10,14 +10,16 @@ const App = function() {
   const [result, setResult] = useState([]);
   const [apiKey, setApiKey] = useState('AIzaSyABr3qUyULawkxgjZDk3HwgwdbwhImINDg');
   const [quantity, setQuantity] = useState('');
-  const [pagin, setPagin] = useState();
+  const [count, setCount] = useState(0);
+
   const handleChange = (event) => {
     const book = event.target.value;
     setBook(book);
   }
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30')
+    setCount(0);
+    await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30')
     .then(data => {
       console.log(data);
       console.log(data.data.items);
@@ -25,7 +27,37 @@ const App = function() {
       setQuantity(data);
     });
   }
-    
+
+  const handlePaginationPrev = async() => {
+    if ((count - 30) < 0) {
+      alert('This is the first page.');
+    }
+    else {
+      setCount(count => count - 30);
+      await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString())
+      .then(data => {
+      console.log(data);
+      console.log(data.data.items);
+      setResult(data.data.items);
+    });
+  }
+}
+
+  const handlePaginationNext = async() => {
+    setCount(count => count + 30);
+    if (book === '') {
+      alert('Nothing was prompted.');
+    }
+    else {
+      console.log(count)
+      await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString())
+      .then(data => {
+      console.log(data);
+      console.log(data.data.items);
+      setResult(data.data.items);
+    });
+    }
+  }
   return (
     <section className="header">
       <div className="navbar navbar-dark bg-dark">
@@ -70,13 +102,17 @@ const App = function() {
       {result.length !== 0 ? <div className='result'> <h2 className="results">Found {quantity.data.totalItems} results</h2></div> : ''}
       <div className='cards'>
         {result.map((book, index) => (
-          <a target='_blank' href={book.volumeInfo.previewLink} className='book-card'>
+          <li target='_blank' href={book.volumeInfo.previewLink} className='book-card' key={book.id}>
             <h3 className='book-category'>{book.volumeInfo.categories + ''}</h3>
             <img src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title} width={250} height={350}/>
             <h3 className='book-title'>{book.volumeInfo.title}</h3>            
             <h3 className='book-author'>{book.volumeInfo.authors + ''}</h3>
-          </a>
+          </li>
       ))}
+        </div>
+        <div className='pagination'>
+          <button className='pagination-button' onClick={handlePaginationPrev}>Previous page</button>
+          <button className='pagination-button' onClick={handlePaginationNext}>Next page</button>
         </div>
     </section>
   );
