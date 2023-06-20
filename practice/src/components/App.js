@@ -102,12 +102,12 @@ const App = function() {
       {result.length !== 0 ? <div className='result'> <h2 className="results">Found {quantity.data.totalItems} results</h2></div> : ''}
       <div className='cards'>
         {result.map((book, index) => (
-          <li target='_blank' href={book.volumeInfo.previewLink} className='book-card' key={book.id}>
+          <a target='_blank' href={book.volumeInfo.previewLink} className='book-card' key={book.id}>
             <h3 className='book-category'>{book.volumeInfo.categories + ''}</h3>
             <img src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title} width={250} height={350}/>
             <h3 className='book-title'>{book.volumeInfo.title}</h3>            
             <h3 className='book-author'>{book.volumeInfo.authors + ''}</h3>
-          </li>
+          </a>
       ))}
         </div>
         <div className='pagination'>
