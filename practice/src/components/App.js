@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/App.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -11,6 +11,7 @@ const App = function() {
   const [apiKey, setApiKey] = useState('AIzaSyABr3qUyULawkxgjZDk3HwgwdbwhImINDg');
   const [quantity, setQuantity] = useState('');
   const [count, setCount] = useState(0);
+  const [reload, setReload] = useState();
 
   const handleChange = (event) => {
     const book = event.target.value;
@@ -43,12 +44,13 @@ const App = function() {
   }
 }
 
-  const handlePaginationNext = async() => {
-    setCount(count => count + 30);
+  const handlePaginationNext = async(event) => {
     if (book === '') {
       alert('Nothing was prompted.');
     }
     else {
+      event.preventDefault();
+      setCount(count => count + 30);
       console.log(count)
       await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString())
       .then(data => {
@@ -58,6 +60,35 @@ const App = function() {
     });
     }
   }
+
+  const sortBookNewest = (event) => {
+    event.preventDefault();
+    result.map(book => {
+      if (book.volumeInfo.hasOwnProperty('publishedDate') === false) book.volumeInfo.publishedDate = '0000'; 
+    });
+    result.sort((a, b) => {
+      return parseInt(b.volumeInfo.publishedDate.substring(0,4) - a.volumeInfo.publishedDate.substring(0,4))});
+    setReload({});
+    }
+
+    const sortBookName = (event) => {
+      event.preventDefault();
+      result.sort((a, b) => {
+      return (a.volumeInfo.title.localeCompare(b.volumeInfo.title))});
+      setReload({});
+      }
+
+      const sortBookPopularity = (event) => {
+        event.preventDefault();
+        axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString()+'&orderBy=relevance')
+        .then(data => {
+        console.log(data);
+        console.log(data.data.items);
+        setResult(data.data.items);
+        });
+        setReload({});
+        }
+
   return (
     <section className="header">
       <div className="navbar navbar-dark bg-dark">
@@ -89,12 +120,12 @@ const App = function() {
           <span className='sorting-text'>Sorting by</span>
           <div className="dropdown dropdown-2">
             <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              relevance
+              Sort by
             </button>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a className="dropdown-item" href="#">Most popular</a>
-              <a className="dropdown-item" href="#">Newest</a>
-              <a className="dropdown-item" href="#">Name</a>
+              <a className="dropdown-item" onClick={sortBookPopularity}>Relevance</a>
+              <a className="dropdown-item" onClick={sortBookNewest}>Newest</a>
+              <a className="dropdown-item" onClick={sortBookName}>Name</a>
             </div>
           </div>
         </div> 
@@ -108,7 +139,8 @@ const App = function() {
             <h3 className='book-title'>{book.volumeInfo.title}</h3>            
             <h3 className='book-author'>{book.volumeInfo.authors + ''}</h3>
           </a>
-      ))}
+      ))
+      }
         </div>
         <div className='pagination'>
           <button className='pagination-button' onClick={handlePaginationPrev}>Previous page</button>
