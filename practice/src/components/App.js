@@ -12,6 +12,7 @@ const App = function() {
   const [quantity, setQuantity] = useState('');
   const [count, setCount] = useState(0);
   const [reload, setReload] = useState();
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
     const book = event.target.value;
@@ -19,6 +20,7 @@ const App = function() {
   }
   const handleSubmit = async(event) => {
     event.preventDefault();
+    setLoading(true);
     setCount(0);
     await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30')
     .then(data => {
@@ -26,6 +28,7 @@ const App = function() {
       console.log(data.data.items);
       setResult(data.data.items);
       setQuantity(data);
+      setLoading(false);
     });
   }
 
@@ -34,12 +37,14 @@ const App = function() {
       alert('This is the first page.');
     }
     else {
+      setLoading(true);
       setCount(count => count - 30);
       await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString())
       .then(data => {
       console.log(data);
       console.log(data.data.items);
       setResult(data.data.items);
+      setLoading(false);
     });
   }
 }
@@ -50,6 +55,7 @@ const App = function() {
     }
     else {
       event.preventDefault();
+      setLoading(true);
       setCount(count => count + 30);
       console.log(count)
       await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString())
@@ -57,6 +63,7 @@ const App = function() {
       console.log(data);
       console.log(data.data.items);
       setResult(data.data.items);
+      setLoading(false);
     });
     }
   }
@@ -76,9 +83,10 @@ const App = function() {
       result.sort((a, b) => {
       return (a.volumeInfo.title.localeCompare(b.volumeInfo.title))});
       setReload({});
-      }
-
+    }
+      
       const sortBookPopularity = (event) => {
+        setLoading(true);
         event.preventDefault();
         axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString()+'&orderBy=relevance')
         .then(data => {
@@ -86,6 +94,7 @@ const App = function() {
         console.log(data.data.items);
         setResult(data.data.items);
         });
+        setLoading(false);
         setReload({});
         }
 
@@ -132,7 +141,12 @@ const App = function() {
       </div>
       {result.length !== 0 ? <div className='result'> <h2 className="results">Found {quantity.data.totalItems} results</h2></div> : ''}
       <div className='cards'>
-        {result.map((book, index) => (
+        {loading ? (
+        <div className="loader-container">
+      	  <div className="spinner">
+          </div>
+        </div>
+      ) : result.map((book, index) => (
           <a target='_blank' href={book.volumeInfo.previewLink} className='book-card' key={book.id}>
             <h3 className='book-category'>{book.volumeInfo.categories + ''}</h3>
             <img src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title} width={250} height={350}/>
