@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Routes, Route, HashRouter } from 'react-router
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <HashRouter basename={window.location.pathname || ''}>
+    <HashRouter baseline="/">
     <Routes>
     <Route path='/' element={<App />} />
     <Route path='/more' element={<Main />} />
