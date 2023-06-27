@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import Main from './components/Main';
 import reportWebVitals from './components/reportWebVitals';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, HashRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Router basename={window.location.pathname || ''}>
+    <HashRouter basename={window.location.pathname || ''}>
     <Routes>
     <Route path='/' element={<App />} />
     <Route path='/more' element={<Main />} />
     </Routes>
-    </Router>
+    </HashRouter>
   </React.StrictMode>
 );
 
