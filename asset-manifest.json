@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/Modsen_Test_Repisitory/static/css/main.b8fc01da.css",
-    "main.js": "/Modsen_Test_Repisitory/static/js/main.ec1abbb3.js",
+    "main.js": "/Modsen_Test_Repisitory/static/js/main.365a00ae.js",
     "static/js/787.635aedaa.chunk.js": "/Modsen_Test_Repisitory/static/js/787.635aedaa.chunk.js",
     "static/media/books.jpg": "/Modsen_Test_Repisitory/static/media/books.50e27f272f651af3d0d8.jpg",
     "index.html": "/Modsen_Test_Repisitory/index.html",
     "main.b8fc01da.css.map": "/Modsen_Test_Repisitory/static/css/main.b8fc01da.css.map",
-    "main.ec1abbb3.js.map": "/Modsen_Test_Repisitory/static/js/main.ec1abbb3.js.map",
+    "main.365a00ae.js.map": "/Modsen_Test_Repisitory/static/js/main.365a00ae.js.map",
     "787.635aedaa.chunk.js.map": "/Modsen_Test_Repisitory/static/js/787.635aedaa.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b8fc01da.css",
-    "static/js/main.ec1abbb3.js"
+    "static/js/main.365a00ae.js"
   ]
 }
