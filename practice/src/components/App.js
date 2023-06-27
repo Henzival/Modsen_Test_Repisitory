@@ -1,18 +1,28 @@
-import React, {useState, useEffect, Component} from 'react';
+import React, {useState, useEffect, Component, useContext, createContext} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/App.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
-import './Main.js';
+import Main from './Main.js';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const App = function() {
-  const [book, setBook] = useState('');
+  const [book, setBook] = useState('flowers');
   const [result, setResult] = useState([]);
   const [apiKey, setApiKey] = useState('AIzaSyABr3qUyULawkxgjZDk3HwgwdbwhImINDg');
   const [quantity, setQuantity] = useState('');
   const [count, setCount] = useState(0);
   const [reload, setReload] = useState();
   const [loading, setLoading] = useState(false);
+  let [categ, setCateg] = useState([]);
+
+const navigate = useNavigate();
+
+const navigation = (title, category, authors, thumbnail, description, link, countState) => {
+  navigate('/more', {
+    state: {passedInfo: [title, category, authors, thumbnail, description, link, countState]} 
+  });
+}
 
   const handleChange = (event) => {
     const book = event.target.value;
@@ -31,6 +41,7 @@ const App = function() {
       setLoading(false);
     });
   }
+
 
   const handlePaginationPrev = async() => {
     if ((count - 30) < 0) {
@@ -78,6 +89,100 @@ const App = function() {
     setReload({});
     }
 
+    const sortBookArt = (event) => {
+      event.preventDefault();
+      result.map((book, idx = result.length()) => {
+          setCateg(book.volumeInfo.categories);
+          console.log(categ);
+          if (categ !== 'Art') {
+          result.splice(idx, 1);
+          idx--;
+          }
+      });
+      console.log(result);
+      setReload({});
+    }
+      const sortBookBiography = (event) => {
+        event.preventDefault();
+        result.map((book, idx = result.length()) => {
+          setCateg(book.volumeInfo.categories);
+          console.log(categ);
+          if (categ !== 'Biography') {
+          result.splice(idx, 1);
+          idx--;
+          }
+      });
+      console.log(result);
+      setReload({});
+        }
+
+        const sortBookComputers = (event) => {
+          event.preventDefault();
+      result.map((book, idx = result.length()) => {
+          setCateg(book.volumeInfo.categories);
+          console.log(categ);
+          if (categ !== 'Computers') {
+          result.splice(idx, 1);
+          idx--;
+          }
+      });
+      console.log(result);
+      setReload({});
+          }
+
+          const sortBookHistory = (event) => {
+            event.preventDefault();
+      result.map((book, idx = result.length()) => {
+          setCateg(book.volumeInfo.categories);
+          console.log(categ);
+          if (categ !== 'History') {
+          result.splice(idx, 1);
+          idx--;
+          }
+      });
+      console.log(result);
+      setReload({});
+            }
+            const sortBookMedical = (event) => {
+              event.preventDefault();
+      result.map((book, idx = result.length()) => {
+          setCateg(book.volumeInfo.categories);
+          console.log(categ);
+          if (categ !== 'Medical') {
+          result.splice(idx, 1);
+          idx--;
+          }
+      });
+      console.log(result);
+      setReload({});
+                }
+
+                const sortBookPoetry = (event) => {
+                  event.preventDefault();
+          result.map((book, idx = result.length()) => {
+              setCateg(book.volumeInfo.categories);
+              console.log(categ);
+              if (categ !== 'Poetry') {
+              result.splice(idx, 1);
+              idx--;
+              }
+          });
+          console.log(result);
+          setReload({});
+                    }
+    const sortBookAll = (event) => {
+        setLoading(true);
+        event.preventDefault();
+        axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString()+'&orderBy=relevance')
+        .then(data => {
+        console.log(data);
+        console.log(data.data.items);
+        setResult(data.data.items);
+        });
+        setLoading(false);
+        setReload({});
+      }
+
     const sortBookName = (event) => {
       event.preventDefault();
       result.sort((a, b) => {
@@ -118,17 +223,21 @@ const App = function() {
           <span className='categories-text'>Categories</span>
           <div className="dropdown dropdown-1">
             <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              all
+              Filter
             </button>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a className="dropdown-item" href="#">Art</a>
-              <a className="dropdown-item" href="#">Sci-fi</a>
-              <a className="dropdown-item" href="#">History</a>
+              <a className="dropdown-item" onClick={sortBookAll}>All</a>
+              <a className="dropdown-item" onClick={sortBookArt}>Art</a>
+              <a className="dropdown-item" onClick={sortBookBiography}>Biography</a>
+              <a className="dropdown-item" onClick={sortBookComputers}>Computers</a>
+              <a className="dropdown-item" onClick={sortBookHistory}>History</a>
+              <a className="dropdown-item" onClick={sortBookMedical}>Medical</a>
+              <a className="dropdown-item" onClick={sortBookPoetry}>Poetry</a>
             </div>
           </div>
           <span className='sorting-text'>Sorting by</span>
           <div className="dropdown dropdown-2">
-            <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button className="btn btn-secondary dropdown-toggle dropdown-button-2" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Sort by
             </button>
             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -147,17 +256,17 @@ const App = function() {
           </div>
         </div>
       ) : result.map((book, index) => (
-          <a target='_blank' href={book.volumeInfo.previewLink} className='book-card' key={book.id}>
+          <a target='_blank' className='book-card' key={book.id} onClick={() => {navigation(book.volumeInfo.title, book.volumeInfo.categories, book.volumeInfo.authors, book.volumeInfo.imageLinks.thumbnail, book.volumeInfo.description, book.volumeInfo.previewLink, count);}}>
             <h3 className='book-category'>{book.volumeInfo.categories + ''}</h3>
             <img src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title} width={250} height={350}/>
             <h3 className='book-title'>{book.volumeInfo.title}</h3>            
             <h3 className='book-author'>{book.volumeInfo.authors + ''}</h3>
-          </a>
+            </a>
       ))
       }
         </div>
         <div className='pagination'>
-          <button className='pagination-button' onClick={handlePaginationPrev}>Previous page</button>
+          <button className='pagination-button-left' onClick={handlePaginationPrev}>Previous page</button>
           <button className='pagination-button' onClick={handlePaginationNext}>Next page</button>
         </div>
     </section>
