@@ -3,13 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/App.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import axios from 'axios';
-import Main from './Main.js';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const App = function() {
   const [book, setBook] = useState('flowers');
   const [result, setResult] = useState([]);
-  const [apiKey, setApiKey] = useState('AIzaSyABr3qUyULawkxgjZDk3HwgwdbwhImINDg');
   const [quantity, setQuantity] = useState('');
   const [count, setCount] = useState(0);
   const [reload, setReload] = useState();
@@ -32,7 +30,7 @@ const navigation = (title, category, authors, thumbnail, description, link, coun
     event.preventDefault();
     setLoading(true);
     setCount(0);
-    await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30')
+    await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+process.env.REACT_APP_API_KEY+'&maxResults=30')
     .then(data => {
       console.log(data);
       console.log(data.data.items);
@@ -50,7 +48,7 @@ const navigation = (title, category, authors, thumbnail, description, link, coun
     else {
       setLoading(true);
       setCount(count => count - 30);
-      await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString())
+      await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+process.env.REACT_APP_API_KEY+'&maxResults=30'+'&startIndex='+count.toString())
       .then(data => {
       console.log(data);
       console.log(data.data.items);
@@ -69,7 +67,7 @@ const navigation = (title, category, authors, thumbnail, description, link, coun
       setLoading(true);
       setCount(count => count + 30);
       console.log(count)
-      await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString())
+      await axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+process.env.REACT_APP_API_KEY+'&maxResults=30'+'&startIndex='+count.toString())
       .then(data => {
       console.log(data);
       console.log(data.data.items);
@@ -173,7 +171,7 @@ const navigation = (title, category, authors, thumbnail, description, link, coun
     const sortBookAll = (event) => {
         setLoading(true);
         event.preventDefault();
-        axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString()+'&orderBy=relevance')
+        axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+process.env.REACT_APP_API_KEY+'&maxResults=30'+'&startIndex='+count.toString()+'&orderBy=relevance')
         .then(data => {
         console.log(data);
         console.log(data.data.items);
@@ -193,7 +191,7 @@ const navigation = (title, category, authors, thumbnail, description, link, coun
       const sortBookPopularity = (event) => {
         setLoading(true);
         event.preventDefault();
-        axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+apiKey+'&maxResults=30'+'&startIndex='+count.toString()+'&orderBy=relevance')
+        axios.get('https://www.googleapis.com/books/v1/volumes?q='+book+'&key='+process.env.REACT_APP_API_KEY+'&maxResults=30'+'&startIndex='+count.toString()+'&orderBy=relevance')
         .then(data => {
         console.log(data);
         console.log(data.data.items);

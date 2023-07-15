@@ -1,8 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/App.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import App from './App.js';
-import { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 
@@ -14,7 +12,7 @@ const Main = function() {
     const navigate = useNavigate();
 
     const navigation = (count) => {
-        navigate('/');
+        navigate('/main');
     }
     console.log(data.state.passedInfo[6]);
 

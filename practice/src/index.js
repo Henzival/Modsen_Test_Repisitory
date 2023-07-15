@@ -2,15 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import Main from './components/Main';
+import Welcome from './components/Welcome';
 import reportWebVitals from './components/reportWebVitals';
-import { BrowserRouter as Router, Routes, Route, HashRouter } from 'react-router-dom';
+import { Routes, Route, HashRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <HashRouter baseline="/">
     <Routes>
-    <Route path='/' element={<App />} />
+    <Route path='/' element={<Welcome />} />
+    <Route path='/main' element={<App />} />
     <Route path='/more' element={<Main />} />
     </Routes>
     </HashRouter>
